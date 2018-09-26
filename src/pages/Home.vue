@@ -4,7 +4,8 @@
         .container
             swipeable-cell(v-for="(item, index) in dataList", 
                           :key="index", 
-                          :index="index")
+                          :index="index",
+                          @swipeable-cell-delete="handleItemDelete")
               .cell(:style="{ height: item.cellHeight }")
                 img(:src="item.imgURL")
                 .right-block
@@ -37,6 +38,11 @@
                         cellHeight: '150px'
                     }
                 ]
+            }
+        },
+        methods: {
+            handleItemDelete(index) {
+                this.dataList.splice(index, 1);
             }
         },
         components: {

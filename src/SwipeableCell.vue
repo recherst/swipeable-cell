@@ -2,7 +2,7 @@
         .list-item(data-type="0",
                     @touchstart.capture="touchStart",
                     @touchend.capture="touchEnd",
-                    @click.stop="jumpRoute",)
+                    @click.stop="tap",)
             slot
             .delete(@click="deleteCell", :data-index="index") 删除
 </template>
@@ -23,7 +23,7 @@
                 this.startX = e.touches[0].clientX;
             },
             touchEnd(e) {
-                console.log('touch end');
+                // console.log('touch end');
                 // 当前滑动的父元素
                 let currentElement = e.currentTarget;
                 // 记录结束位置
@@ -40,7 +40,7 @@
                 this.startX = 0;
                 this.endX = 0;
             },
-            jumpRoute() {
+            tap() {
                 if (this.chechSlide()) {
                     this.resetSlide();
                 }
