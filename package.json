@@ -15,8 +15,9 @@
     "url": "https://github.com/RecherJ/swipeable-cell.git"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.js --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "prod": "cross-env NODE_ENV=production webpack --config ./webpack.prod.config.js"
   },
   "dependencies": {
     "autoprefixer": "^9.1.5",
