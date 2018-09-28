@@ -1,11 +1,10 @@
 <template lang="pug">
         .list-item(data-type="0",
-                    @touchstart.capture="touchStart",
-                    @touchmove.capture="touchmove",
-                    @touchend.capture="touchEnd",
-                    @click.stop="tap")
+                    @touchstart="touchStart",
+                    @touchmove="touchmove",
+                    @touchend="touchEnd")
             slot
-            .delete(@click="deleteCell", :data-index="index") 删除
+            .delete(@touchstart.stop="deleteCell", :data-index="index") 删除
 </template>
 <script>
     export default {
@@ -79,7 +78,8 @@
                 this.endX = 0;
             },
             tap() {
-                this.$emit('swipeable-cell-delete', this.index);
+                console.log('sadsd');
+                // this.resetSlide();
             },
             resetSlide() {
                 const listItems = document.querySelectorAll('.list-item');
@@ -96,8 +96,6 @@
             },
             deleteCell(e) {
                 const index = e.currentTarget.dataset.index;
-                // 复位
-                this.resetSlide();
                 this.$emit('swipeable-cell-delete', index);
             }
         }
