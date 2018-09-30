@@ -4,7 +4,9 @@
                     @touchmove="touchmove",
                     @touchend="touchEnd")
             slot
-            .delete(@touchstart.stop="deleteCell", :data-index="index") 删除
+            .delete(:class="{ swipeabledelete: isActivated }", 
+                    @touchstart.stop="deleteCell", 
+                    :data-index="index") 删除
 </template>
 <script>
     export default {
@@ -22,7 +24,8 @@
                 // 记录结束位置
                 endX: 0,
                 delta: 0,
-                currentSpreadNode: null
+                currentSpreadNode: null,
+                isActivated: false
             }
         },
         methods: {
@@ -44,13 +47,18 @@
                 } else {
                     this.delta = startX - this.startX;
                 }
-                // console.log('diff ---', this.delta);
+                console.log('diff ---', this.delta);
+                if (this.delta < 0 && Math.abs(this.delta) > window.innerWidth * 0.6) {
+                    this.isActivated = true;
+                } else {
+                    this.isActivated = false;
+                }
                 currentTarget.style.transform = `translate3d(${this.delta}px, 0, 0)`;
                 deleteNode.style.right = `${this.delta}px`;
                 deleteNode.style.width = `${-this.delta}px`;
             },
             touchEnd(e) {
-                // console.log('touch end');
+                console.log('touch end');
                 // 当前滑动的父元素
                 let currentElement = e.currentTarget;
                 let deleteNode = currentElement.childNodes[1];
@@ -58,13 +66,24 @@
                 this.endX = e.changedTouches[0].clientX;
                 const offset = this.endX - this.startX;
                 currentElement.childNodes[0].style.transition = `0.3s`;
-                if (offset < -80) {
+                const delta = Math.abs(offset);
+                if (offset < 0 && delta > window.innerWidth * 0.6) {
+                    // 删除
+                    // console.log('-- shanchu ----');
+                    currentElement.style.transform = `translate3d(0, 0, 0)`;
+                    deleteNode.style.right = `0`
+                    deleteNode.style.width = `0`
+                    // 调用删除函数
+                    console.log(deleteNode.dataset.index);
+                    this.$emit('swipeable-cell-delete', deleteNode.dataset.index);
+                } else if (offset < 0 && delta > 80 && delta < window.innerWidth * 0.6) {
                     currentElement.style.transform = `translate3d(-80px, 0, 0)`;
                     deleteNode.style.right = `-80px`;
                     deleteNode.style.width = `80px`;
                     currentElement.dataset.type = '1';
                     this.delta = -80;
-                } else {
+                } else { // 复位
+                    // console.log('-- 复位 --');
                     currentElement.style.transform = `translate3d(0, 0, 0)`;
                     deleteNode.style.right = `0`;
                     deleteNode.style.width = `0`;
@@ -72,14 +91,14 @@
                     this.delta = 0;
                     this.startX = 0;
                 }
+                
+                this.delta = 0;
+                this.startX = 0;
+                this.isActivated = false;
                 setTimeout(() => {
                     currentElement.childNodes[0].style.transition = ``;
+                    deleteNode.style.transition = ``;
                 }, 300);
-                this.endX = 0;
-            },
-            tap() {
-                console.log('sadsd');
-                // this.resetSlide();
             },
             resetSlide() {
                 const listItems = document.querySelectorAll('.list-item');
@@ -119,6 +138,13 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            padding: 0;
         }
+
+        .swipeabledelete {
+            justify-content: flex-start;
+            padding: 0 20px;
+        }
+        
     }
 </style>
