@@ -1,20 +1,23 @@
 <template lang="pug">
-        .list-item(data-type="0",
-                    @touchstart="touchStart",
-                    @touchmove="touchmove",
-                    @touchend="touchEnd")
+        .list-item(@touchstart="touchStart",
+                   @touchmove="touchmove",
+                   @touchend="touchEnd")
             slot
-            .delete(:class="{ swipeabledelete: isActivated }", 
-                    @touchstart.stop="deleteCell", 
-                    :data-index="index") 删除
+            .warpper(:style="warpperStyle")
+                .action(v-for="(item, index) in mergeOptions.actions", 
+                        :key="index",
+                        @touchstart.stop="tap(index, $event)",
+                        :style="actionStyle(index)")
+                    img(class="icon", v-if="item.hasOwnProperty('image')", :src="item.image")
+                    span(v-if="item.hasOwnProperty('title')") {{ item.title }}
 </template>
 <script>
     export default {
         'name': 'swipeable-cell',
         props: {
-            index: {
-                type: Number,
-                default: 0
+            options: {
+                type: Object,
+                default: () => ({})
             }
         },
         data() {
@@ -24,11 +27,58 @@
                 // 记录结束位置
                 endX: 0,
                 delta: 0,
-                currentSpreadNode: null,
-                isActivated: false
+                wrapperWidth: 0,
+                mergeOptions: {},
+                defaultOptions: {
+                    width: 80,
+                    swipeThreshold: window.innerWidth * 0.6,
+                    backgroundColor: '#ff4949',
+                    direction: 'vertical',
+                    actions: [
+                        {
+                            title: '删除',
+                            backgroundColor: '#cc0000',
+                        }
+                    ]
+                }
             }
         },
+        created() {
+            // 合并 options
+            Object.assign(this.mergeOptions, this.defaultOptions, this.options);
+        },
+        computed: {
+            warpperStyle() {
+                let style = {}
+                let totalWidth = 0
+                this.mergeOptions.actions.forEach(element => {
+                    totalWidth += parseInt(this.mergeOptions.width)
+                })
+                style.marginLeft = -totalWidth + 'px'
+                this.wrapperWidth = totalWidth
+                return style
+            },
+        },
         methods: {
+            // 处理每个action的样式
+            actionStyle(index) {
+                const item = this.mergeOptions.actions[index];
+                let style = {};
+                if (item.hasOwnProperty('backgroundColor')) {
+                    style.backgroundColor = item.backgroundColor
+                } else {
+                    style.backgroundColor = this.mergeOptions.backgroundColor
+                }
+                if (this.mergeOptions.direction == 'horizontal') {
+                    style.flexDirection = 'row'
+                    style.webkitFlexDirection = 'row'
+                } else {
+                    style.flexDirection = 'column'
+                    style.webkitFlexDirection = 'column'
+                }
+                // console.log('样式 --->', style);
+                return style;
+            },
             touchStart(e) {
                 // 记录初始位置
                 this.startX = e.touches[0].clientX;
@@ -41,52 +91,49 @@
                 // console.log('touch move');
                 const startX = e.touches[0].clientX;
                 const currentTarget = e.currentTarget;
-                let deleteNode = currentTarget.childNodes[1];
+                let wrapperNode = currentTarget.childNodes[1];
                 if (currentTarget.dataset.type == 1) { // 展开状态
                     this.delta = startX - this.startX - 80;
                 } else {
                     this.delta = startX - this.startX;
                 }
-                console.log('diff ---', this.delta);
-                if (this.delta < 0 && Math.abs(this.delta) > window.innerWidth * 0.6) {
-                    this.isActivated = true;
-                } else {
-                    this.isActivated = false;
-                }
+                // console.log('diff ---', this.delta);
                 currentTarget.style.transform = `translate3d(${this.delta}px, 0, 0)`;
-                deleteNode.style.right = `${this.delta}px`;
-                deleteNode.style.width = `${-this.delta}px`;
+                wrapperNode.style.right = `${this.delta}px`;
+                wrapperNode.style.width = `${-this.delta}px`;
             },
             touchEnd(e) {
-                console.log('touch end');
+                // console.log('touch end');
                 // 当前滑动的父元素
                 let currentElement = e.currentTarget;
-                let deleteNode = currentElement.childNodes[1];
-                // 记录结束位置
+                let wrapperNode = currentElement.childNodes[1];
+                // // 记录结束位置
                 this.endX = e.changedTouches[0].clientX;
                 const offset = this.endX - this.startX;
                 currentElement.childNodes[0].style.transition = `0.3s`;
                 const delta = Math.abs(offset);
-                if (offset < 0 && delta > window.innerWidth * 0.6) {
+                // console.log('总宽度 --', this.wrapperWidth);
+                let threshold = this.defaultOptions.swipeThreshold > this.wrapperWidth ? window.innerWidth * 0.6 : this.wrapperWidth
+                if (offset < 0 && delta > threshold) {
                     // 删除
-                    // console.log('-- shanchu ----');
+                    console.log('-- shanchu ----');
                     currentElement.style.transform = `translate3d(0, 0, 0)`;
-                    deleteNode.style.right = `0`
-                    deleteNode.style.width = `0`
+                    wrapperNode.style.right = `0`
+                    wrapperNode.style.width = `0`
                     // 调用删除函数
-                    console.log(deleteNode.dataset.index);
-                    this.$emit('swipeable-cell-delete', deleteNode.dataset.index);
-                } else if (offset < 0 && delta > 80 && delta < window.innerWidth * 0.6) {
-                    currentElement.style.transform = `translate3d(-80px, 0, 0)`;
-                    deleteNode.style.right = `-80px`;
-                    deleteNode.style.width = `80px`;
+                    const deleteBtnIndex = this.mergeOptions.actions.length - 1
+                    this.$emit('swipeable-cell-actions', {cellIndex: currentElement.dataset.index, actionIndex: deleteBtnIndex});
+                } else if (offset < 0 && delta > this.wrapperWidth && delta < threshold) {
+                    currentElement.style.transform = `translate3d(-${this.wrapperWidth}px, 0, 0)`;
+                    wrapperNode.style.right = `-${this.wrapperWidth}px`;
+                    wrapperNode.style.width = `${this.wrapperWidth}px`;
                     currentElement.dataset.type = '1';
-                    this.delta = -80;
+                    this.delta = -this.wrapperWidth;
                 } else { // 复位
                     // console.log('-- 复位 --');
                     currentElement.style.transform = `translate3d(0, 0, 0)`;
-                    deleteNode.style.right = `0`;
-                    deleteNode.style.width = `0`;
+                    wrapperNode.style.right = `0`;
+                    wrapperNode.style.width = `0`;
                     currentElement.dataset.type = '0';
                     this.delta = 0;
                     this.startX = 0;
@@ -94,10 +141,9 @@
                 
                 this.delta = 0;
                 this.startX = 0;
-                this.isActivated = false;
                 setTimeout(() => {
                     currentElement.childNodes[0].style.transition = ``;
-                    deleteNode.style.transition = ``;
+                    wrapperNode.style.transition = ``;
                 }, 300);
             },
             resetSlide() {
@@ -113,38 +159,51 @@
                     }
                 }
             },
-            deleteCell(e) {
-                const index = e.currentTarget.dataset.index;
-                this.$emit('swipeable-cell-delete', index);
-            }
+            tap(index, e) {
+                // console.log('actionindex --', index, e);
+                const swipeableCell = e.currentTarget.parentNode.parentNode;
+                // console.log('suoyin ----', swipeableCell.dataset.index);
+                this.$emit('swipeable-cell-actions', {cellIndex: swipeableCell.dataset.index, actionIndex: index});
+            },
         }
     }
 </script>
 <style scoped lang="scss">
     .list-item {
         position: relative;
-
-        .delete {
+        
+        .warpper {
             width: 0;
             height: 100%;
-            background: #ff4949;
             font-size: 17px;
             color: #fff;
-            margin-left: 6rem;
             position: absolute;
             top:0;
             right: 0;
             display: flex;
             align-items: center;
-            justify-content: center;
+            flex-direction: row;
+            justify-content: space-around;
             overflow: hidden;
             padding: 0;
+        }
+
+        .action {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: inherit;
+            flex-grow: 1;
+
+            .icon {
+                max-width: 30px; 
+                max-height: 30px;
+            }
         }
 
         .swipeabledelete {
             justify-content: flex-start;
             padding: 0 20px;
         }
-        
     }
 </style>

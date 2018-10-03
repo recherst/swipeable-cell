@@ -4,8 +4,9 @@
         .container
             swipeable-cell(v-for="(item, index) in dataList", 
                           :key="index", 
-                          :index="index",
-                          @swipeable-cell-delete="handleItemDelete")
+                          :data-index="index",
+                          :options="options",
+                          @swipeable-cell-actions="handleItemDelete")
               .cell(:style="{ height: item.cellHeight }")
                 img(:src="item.imgURL")
                 .right-block
@@ -37,12 +38,35 @@
                         subTitle: '网络图片城堡',
                         cellHeight: '150px'
                     }
-                ]
+                ],
+                options: {
+                    width: 40,
+                    // direction: 'horizontal',
+                    actions: [
+                        {
+                            title: '关注',
+                            backgroundColor: '#8b7216',
+                        },
+                        {
+                            // title: '删除',
+                            image: require('../assets/search_delete.png'),
+                            backgroundColor: '#cc0000',
+                        }
+                    ]
+                },
+                
             }
         },
         methods: {
-            handleItemDelete(index) {
-                this.dataList.splice(index, 1);
+            handleItemDelete(o) {
+                const { cellIndex, actionIndex } = o;
+                console.log(cellIndex, actionIndex);
+                this.dataList.splice(cellIndex, 1);
+                // if (actionIndex == this.options.actions.length - 1) {
+                //     this.dataList.splice(cellIndex, 1);
+                // } else {
+                //     console.log('点击了其他按钮');
+                // }
             }
         },
         components: {
