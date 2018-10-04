@@ -85,18 +85,17 @@ action buttons will give you a callback when user tapped,  in your component's m
 
 ```js
 export default {
-    ...
-  	methods: {
-  		// index: you just tapped cell
-    	actionsHandler(o) {
-  			// cellIndex: which is cell index in your dataList 
-  			// actionIndex： which is tapped action button's index if you have more,
-  			// and if only one the index is 0
-  			const { cellIndex, actionIndex } = o
-  			this.dataList.splice(cellIndex, 1)
-			
-		}
-	}
+  ...
+  methods: {
+  	// index: you just tapped cell
+    actionsHandler(o) {
+      // cellIndex: which is cell index in your dataList 
+      // actionIndex： which is tapped action button's index if you have more,
+      // and if only one the index is 0
+      const { cellIndex, actionIndex } = o
+      this.dataList.splice(cellIndex, 1)
+    }
+  }
 }
 ```
 
@@ -135,7 +134,7 @@ data() {
           backgroundColor: '#fd3d30',
         }
       ]
-  	},
+    },
   }
 }
 ```
