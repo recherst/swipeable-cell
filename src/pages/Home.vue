@@ -1,17 +1,19 @@
 <template lang="pug">
     .home
-        h2 滑动删除cell
+        h3 Inbox
         .container
             swipeable-cell(v-for="(item, index) in dataList", 
                           :key="index", 
                           :data-index="index",
                           :options="options",
                           @swipeable-cell-actions="handleItemDelete")
-              .cell(:style="{ height: item.cellHeight }")
-                img(:src="item.imgURL")
-                .right-block
-                    .title {{ item.title }}
-                    .sub-title {{ item.subTitle }}
+              .mail-cell(:style="{ height: item.cellHeight }")
+                .cell-container
+                    .top-block
+                        span.from {{ item.from }}
+                        span.date {{ item.date }}
+                    .subject {{ item.subject }}
+                    .content {{ item.content }}
 </template>
 <script>
     import SwipeableCell from '../SwipeableCell.vue';
@@ -21,52 +23,83 @@
             return {
                 dataList: [
                     {
-                        imgURL: "https://image.baidu.com/search/detail?ct=503316480&z=&tn=baiduimagedetail&ipn=d&word=%E9%A3%8E%E6%99%AF&step_word=&ie=utf-8&in=&cl=2&lm=-1&st=-1&cs=2131205662,1725422972&os=937360927,3624280818&simid=1945580103,818753838&pn=0&rn=1&di=79372123950&ln=1974&fr=&fmq=1537879406188_R&ic=0&s=undefined&se=&sme=&tab=0&width=&height=&face=undefined&is=0,0&istype=2&ist=&jit=&bdtype=13&spn=0&pi=0&gsm=0&objurl=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F241f95cad1c8a786ff65052a6d09c93d70cf5042.jpg&rpstart=0&rpnum=0&adpicid=0",
-                        title: '草原',
-                        subTitle: '网络图片草原',
-                        cellHeight: '100px'
+                        from: 'Realm',
+                        subject: 'Video: Operators and Strong Opinions with Erica Sadun',
+                        content: 'Swift operators are flexible and powerful. They’re symbols that behave like functions, adopting a natural mathematical syntax, for example 1 + 2 versus add(1, 2). So why is it so important that you treat them like potential Swift Kryptonite? Erica Sadun discusses why your operators should be few, well-chosen, and heavily used. There’s even a fun interactive quiz! Play along with “Name That Operator!” and learn about an essential Swift best practice.',
+                        date: '2018-10-04 >'
                     },
                     {
-                        imgURL: 'https://image.baidu.com/search/detail?ct=503316480&z=&tn=baiduimagedetail&ipn=d&word=%E9%A3%8E%E6%99%AF&step_word=&ie=utf-8&in=&cl=2&lm=-1&st=-1&cs=3701485667,96126389&os=3941740315,2637028390&simid=1965380979,589230612&pn=1&rn=1&di=40689355100&ln=1974&fr=&fmq=1537879406188_R&ic=0&s=undefined&se=&sme=&tab=0&width=&height=&face=undefined&is=0,0&istype=2&ist=&jit=&bdtype=13&spn=0&pi=0&gsm=0&objurl=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2Fc75c10385343fbf2618015f7ba7eca8064388fb2.jpg&rpstart=0&rpnum=0&adpicid=0',
-                        title: '湖泊',
-                        subTitle: '网络图片湖泊',
-                        cellHeight: '80px'
+                        from: 'The Pragmatic Bookstore',
+                        subject: `[Pragmatic Bookstore] Your eBook 'Swift Style' is ready for download`,
+                        content: `Hello, The gerbils at the Pragmatic Book`,
+                        date: '2018-10-02 >'
                     },
                     {
-                        imgURL: 'https://image.baidu.com/search/detail?ct=503316480&z=&tn=baiduimagedetail&ipn=d&word=%E9%A3%8E%E6%99%AF&step_word=&ie=utf-8&in=&cl=2&lm=-1&st=-1&cs=783178755,1828230642&os=2897032291,4092308435&simid=4062277603,624323440&pn=9&rn=1&di=50971677260&ln=1974&fr=&fmq=1537879406188_R&ic=0&s=undefined&se=&sme=&tab=0&width=&height=&face=undefined&is=0,0&istype=2&ist=&jit=&bdtype=13&spn=0&pi=0&gsm=0&objurl=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3D6e75baf69858d109d0eea1f1b931a6ca%2Fb2de9c82d158ccbfdfa06cb213d8bc3eb135411e.jpg&rpstart=0&rpnum=0&adpicid=0',
-                        title: '城堡',
-                        subTitle: '网络图片城堡',
-                        cellHeight: '150px'
-                    }
+                        from: `Instagram`,
+                        subject: `mrx, go live and send disappearing photos and videos`,
+                        content: `Go Live and Send Disappearing Photos and Videos. We recently announced two updates:
+                                 live video on Instagram Stories and disappearing photos 
+                                and videos for groups and friends in Instagram Direct.`,
+                        date: '2018-09-28 >'
+                    },
+                    {
+                        from: `Apple News`,
+                        subject: `New WordPress Site`,
+                        content: `Your new WordPress site has been successfully set up at: http://example.com. 
+                                You can log in to the administrator account with the following information:`,
+                        date: '2018-09-17 >'
+                    },
+                    {
+                        from: `Wordpress`,
+                        subject: `How to Change Your Personality in 90 Days`,
+                        content: `How to Change Your Personality. You are not stuck with yourself. New research shows 
+                                that you can troubleshoot personality traits — in therapy.`,
+                        date: '2018-06-04 >'
+                    },
+                    {
+                        from: `IFTTT`,
+                        subject: `See what’s new & notable on IFTTT`,
+                        content: `See what’s new & notable on IFTTT.
+                                 To disable these emails, sign in to manage your settings or unsubscribe.`,
+                        date: '2018-02-28 >'
+                    },
                 ],
                 options: {
-                    width: 40,
+                    width: 70,
                     // direction: 'horizontal',
                     actions: [
                         {
-                            title: '关注',
-                            backgroundColor: '#8b7216',
+                            title: 'more',
+                            image: require('../assets/more-circle.png'),
+                            backgroundColor: '#c7c6cb',
                         },
                         {
-                            // title: '删除',
-                            image: require('../assets/search_delete.png'),
-                            backgroundColor: '#cc0000',
+                            title: 'flag',
+                            image: require('../assets/flag-circle.png'),
+                            backgroundColor: '#fd9502',
+                        },
+                        {
+                            title: 'delete',
+                            image: require('../assets/trash-circle.png'),
+                            backgroundColor: '#fd3d30',
                         }
                     ]
                 },
-                
             }
         },
         methods: {
             handleItemDelete(o) {
                 const { cellIndex, actionIndex } = o;
                 console.log(cellIndex, actionIndex);
-                this.dataList.splice(cellIndex, 1);
-                // if (actionIndex == this.options.actions.length - 1) {
-                //     this.dataList.splice(cellIndex, 1);
-                // } else {
-                //     console.log('点击了其他按钮');
-                // }
+                switch (actionIndex) {
+                case this.options.actions.length - 1:
+                    console.log(`点击了删除按钮`)
+                    this.dataList.splice(cellIndex, 1)
+                    break
+                default:
+                    console.log(`点击了索引为 ${actionIndex} 的按钮`)
+                    break
+                }
             }
         },
         components: {
@@ -77,36 +110,67 @@
 <style scoped lang="scss">
     .home {
         height: 100%;
-        text-align: center;
-
-        h2 {
-            padding: 20px 0;
+        background-color: white;
+        h3 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            z-index: 10;
         }
 
         .container {
             height: inherit;
             overflow: hidden;
+            margin-top: 64px;
 
-            .cell {
-                padding: 0 10px;
-                background-color: burlywood;
-                margin-bottom: 10px;
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-
-                img {
-                    background-color: cadetblue;
-                    width: 80px;
-                    height: 80px;
-                    margin-right: 10px;
-                }
-                .right-block {
-                    text-align: left;
-
-                    .title {
-                        color: #4a4a4a;
-                        font-size: 17px;
+            .mail-cell {
+                padding: 10px 20px 0 20px;
+                .cell-container {
+                    // background-color: beige;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    border-bottom: 1px solid #ccc;
+                    padding-bottom: 10px;
+                    .top-block {
+                        // background-color: aquamarine;
+                        display: flex;
+                        justify-content: space-between;
+                        color: black;
+                        font-size: 16px;
+                        .from {
+                            font-weight: bold;
+                        }
+                        .date {
+                            color: #9b9b9b;
+                            font-size: 14px;
+                        }
+                    }
+                    .subject {
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        color: black;
+                        font-weight: bold;
+                    }
+                    .content {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: box;
+                        display: -webkit-box;
+                        line-clamp: 3;
+                        -webkit-line-clamp: 3;
+                        box-orient: vertical;
+                        -webkit-box-orient: vertical;
+                        color: #9b9b9b;
                     }
                 }
             }
