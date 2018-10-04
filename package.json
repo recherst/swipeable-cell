@@ -1,7 +1,7 @@
 {
-  "name": "swipeable-cell",
+  "name": "swipeable-cell-demo",
   "description": "A Vue.js project",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "ygliusz@gmail.com",
   "license": "MIT",
   "private": false,
@@ -26,6 +26,7 @@
     "postcss-url": "^8.0.0",
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
+    "swipeable-cell": "^0.2.0",
     "vue": "^2.5.11"
   },
   "browserslist": [

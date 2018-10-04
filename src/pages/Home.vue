@@ -17,7 +17,7 @@
 </template>
 <script>
     import SwipeableCell from '../SwipeableCell.vue';
-    
+    // import SwipeableCell from 'swipeable-cell';
     export default {
         data() {
             return {
@@ -65,21 +65,21 @@
                     },
                 ],
                 options: {
-                    width: 70,
-                    // direction: 'horizontal',
+                    width: 90,
+                    direction: 'horizontal',
                     actions: [
                         {
-                            title: 'more',
+                            text: 'more',
                             image: require('../assets/more-circle.png'),
                             backgroundColor: '#c7c6cb',
                         },
                         {
-                            title: 'flag',
+                            text: 'flag',
                             image: require('../assets/flag-circle.png'),
                             backgroundColor: '#fd9502',
                         },
                         {
-                            title: 'delete',
+                            text: 'delete',
                             image: require('../assets/trash-circle.png'),
                             backgroundColor: '#fd3d30',
                         }
@@ -89,17 +89,18 @@
         },
         methods: {
             handleItemDelete(o) {
-                const { cellIndex, actionIndex } = o;
-                console.log(cellIndex, actionIndex);
-                switch (actionIndex) {
-                case this.options.actions.length - 1:
-                    console.log(`点击了删除按钮`)
-                    this.dataList.splice(cellIndex, 1)
-                    break
-                default:
-                    console.log(`点击了索引为 ${actionIndex} 的按钮`)
-                    break
-                }
+                const { cellIndex, actionIndex } = o
+                this.dataList.splice(cellIndex, 1)
+                // console.log(cellIndex, actionIndex)
+                // switch (actionIndex) {
+                // case this.options.actions.length - 1:
+                //     console.log(`点击了删除按钮`)
+                //     this.dataList.splice(cellIndex, 1)
+                //     break
+                // default:
+                //     console.log(`点击了索引为 ${actionIndex} 的按钮`)
+                //     break
+                // }
             }
         },
         components: {
