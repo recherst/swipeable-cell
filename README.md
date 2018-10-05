@@ -2,10 +2,8 @@
 
 **A vue component which imitates iOS  `UITableViewCell` and `UICollectionViewCell` swipe style** 
 
- 
 
-![](https://ws1.sinaimg.cn/large/006tNbRwgy1fvw8ei4cphg30a00hu10a.gif)
-
+<div align="center"><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fvw8ei4cphg30a00hu10a.gif"/></div>
 
 
 ### features
@@ -23,25 +21,24 @@ it's so pretty easy to use, and it supports for:
 
 **default style**
 
-![](https://ws4.sinaimg.cn/large/006tNbRwgy1fvw8yex0grg309y03nwim.gif)
-
+<div align="center"><img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fvw8yex0grg309y03nwim.gif"/></div>
 
 
 **more actions**
 
-![](https://ws2.sinaimg.cn/large/006tNbRwgy1fvw91vzcksg309y03nq7y.gif)
+<div align="center"><img src="https://ws2.sinaimg.cn/large/006tNbRwgy1fvw91vzcksg309y03nq7y.gif"/></div>
 
 **text only**
 
-![](https://ws2.sinaimg.cn/large/006tNbRwgy1fvw943vvk8g309y03nwis.gif)
+<div align="center"><img src="https://ws2.sinaimg.cn/large/006tNbRwgy1fvw943vvk8g309y03nwis.gif"/></div>
 
 **image only**
 
-![](https://ws2.sinaimg.cn/large/006tNbRwgy1fvw95viie2g309y03ndhm.gif)
+<div align="center"><img src="https://ws2.sinaimg.cn/large/006tNbRwgy1fvw95viie2g309y03ndhm.gif"/></div>
 
 **horizontal**
 
-![](https://ws2.sinaimg.cn/large/006tNbRwgy1fvw98f211pg309y03ndij.gif)
+<div align="center"><img src="https://ws2.sinaimg.cn/large/006tNbRwgy1fvw98f211pg309y03ndij.gif"/></div>
 
 
 
@@ -201,4 +198,4 @@ for more usage examples please see demo project.
 
 
 
-**warmly welcome your PR and issues. ** ❤️  
+**warmly welcome your PR and issues.**  ❤️  
