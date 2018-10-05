@@ -9,7 +9,7 @@
                         @touchstart.stop="tap(index, $event)",
                         :style="actionStyle(index)")
                     img(class="icon", v-if="item.hasOwnProperty('image')", :src="item.image")
-                    span(v-if="item.hasOwnProperty('title')") {{ item.text }}
+                    span(v-if="item.hasOwnProperty('text')") {{ item.text }}
 </template>
 <script>
     export default {
@@ -37,7 +37,7 @@
                     direction: 'vertical',
                     actions: [
                         {
-                            title: 'delete',
+                            text: 'delete',
                             backgroundColor: '#cc0000',
                         }
                     ]

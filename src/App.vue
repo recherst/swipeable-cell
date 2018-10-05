@@ -1,20 +1,11 @@
 <template lang="pug">
     #app
-        home
+        router-view
 </template>
 
 <script>
-    import Home from './pages/Home.vue';
     export default {
-      name: 'app',
-      data () {
-        return {
-          
-        }
-      },
-      components: {
-          Home
-      }
+      
     }
 </script>
 

@@ -1,23 +1,16 @@
 <template lang="pug">
     .home
-        h3 Inbox
         .container
             swipeable-cell(v-for="(item, index) in dataList", 
                           :key="index", 
                           :data-index="index",
                           :options="options",
                           @swipeable-cell-actions="handleItemDelete")
-              .mail-cell(:style="{ height: item.cellHeight }")
-                .cell-container
-                    .top-block
-                        span.from {{ item.from }}
-                        span.date {{ item.date }}
-                    .subject {{ item.subject }}
-                    .content {{ item.content }}
+              mail(:item="item")
 </template>
 <script>
-    import SwipeableCell from '../SwipeableCell.vue';
-    // import SwipeableCell from 'swipeable-cell';
+    import SwipeableCell from '../SwipeableCell.vue'
+    import Mail from '../component/Mail.vue'
     export default {
         data() {
             return {
@@ -65,8 +58,6 @@
                     },
                 ],
                 options: {
-                    width: 90,
-                    direction: 'horizontal',
                     actions: [
                         {
                             text: 'more',
@@ -104,7 +95,8 @@
             }
         },
         components: {
-            SwipeableCell
+            SwipeableCell,
+            Mail
         }
     }
 </script>
@@ -112,69 +104,10 @@
     .home {
         height: 100%;
         background-color: white;
-        h3 {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 64px;
-            background-color: #f5f5f5;
-            border-bottom: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 1;
-            z-index: 10;
-        }
 
         .container {
             height: inherit;
             overflow: hidden;
-            margin-top: 64px;
-
-            .mail-cell {
-                padding: 10px 20px 0 20px;
-                .cell-container {
-                    // background-color: beige;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-start;
-                    border-bottom: 1px solid #ccc;
-                    padding-bottom: 10px;
-                    .top-block {
-                        // background-color: aquamarine;
-                        display: flex;
-                        justify-content: space-between;
-                        color: black;
-                        font-size: 16px;
-                        .from {
-                            font-weight: bold;
-                        }
-                        .date {
-                            color: #9b9b9b;
-                            font-size: 14px;
-                        }
-                    }
-                    .subject {
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        color: black;
-                        font-weight: bold;
-                    }
-                    .content {
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        display: box;
-                        display: -webkit-box;
-                        line-clamp: 3;
-                        -webkit-line-clamp: 3;
-                        box-orient: vertical;
-                        -webkit-box-orient: vertical;
-                        color: #9b9b9b;
-                    }
-                }
-            }
         }
     }
     
